@@ -26,6 +26,11 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
     }
   };
 
+  const handleClick = () => {
+    setInput("");
+    onOutputReturn([]);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <Textarea
@@ -34,7 +39,11 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
         onChange={(e) => setInput(e.target.value)}
       />
       <Button onClick={analyzeText}>Analyze</Button>
-      {output.length > 0 ? <Button variant="link">Reset</Button> : null}
+      {output.length > 0 ? (
+        <Button variant="link" onClick={handleClick}>
+          Reset
+        </Button>
+      ) : null}
     </div>
   );
 }
