@@ -1,13 +1,18 @@
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import breakdownCircle from "/breakdown_circle.png";
+import React from "react";
+import Image from "next/image";
 
 export default function Breakdown(props) {
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-center">Text Breakdown</h1>
       <div className="flex justify-around items-center">
-        <img src={breakdownCircle} alt="Breakdown Numbers" />
+        <Image
+          src="/breakdown_circle.png"
+          alt="Breakdown Numbers"
+          width={100}
+          height={100}
+        />
         <div className="text-9xl">N3</div>
       </div>
       <div className="mb-4">

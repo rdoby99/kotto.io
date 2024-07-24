@@ -2,12 +2,8 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-export default function Analyzer() {
-  const [analysis, setAnalysis] = useState(false);
-
+export default function Analyzer({ onOutputReturn, onError, output }) {
   const [input, setInput] = useState("");
-  const [output, setOutput] = useState([]);
-  const [error, setError] = useState("");
 
   const analyzeText = async () => {
     try {
@@ -23,11 +19,10 @@ export default function Analyzer() {
       }
 
       const data = await response.json();
-      setOutput(data.words);
-      setAnalysis(true);
+      onOutputReturn(data.words);
     } catch (error) {
       console.error("An error occurred:", error);
-      setError(error.message);
+      onError(error.message);
     }
   };
 
@@ -39,7 +34,7 @@ export default function Analyzer() {
         onChange={(e) => setInput(e.target.value)}
       />
       <Button onClick={analyzeText}>Analyze</Button>
-      {analysis ? <Button variant="text">Reset</Button> : null}
+      {output.length > 0 ? <Button variant="link">Reset</Button> : null}
     </div>
   );
 }
