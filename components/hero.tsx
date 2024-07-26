@@ -21,7 +21,7 @@ export default function Hero() {
       {output.length > 0 ? (
         <Breakdown words={output} />
       ) : (
-        <div className="text-center col-span-1 flex flex-col gap-4">
+        <div className="text-center text-secondary-foreground col-span-1 flex flex-col gap-4">
           <h1 className="h1">Welcome to Kotto.io</h1>
           <p className="h4">
             Kotto.io is a Japanese text analyzer that breaks down any Japanese

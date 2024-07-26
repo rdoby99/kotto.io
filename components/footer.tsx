@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="flex justify-between w-full py-4 px-4 md:px-16">
+    <footer className="flex justify-between w-full py-4 px-4 md:px-16 text-secondary-foreground">
       <div className="flex flex-col">
         <p>&copy; 2022 Japanese Reader</p>
         <p>Created by Ramona Doby</p>
