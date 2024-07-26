@@ -47,7 +47,7 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full py-32">
+    <div className="flex flex-col gap-4 h-full py-4 md:py-32">
       <Form {...form}>
         <form
           className="h-full flex flex-col gap-2"

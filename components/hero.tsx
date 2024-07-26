@@ -17,7 +17,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="grid grid-cols-2 gap-16 items-center w-full py-16 px-16 min-h-[70vh]">
+    <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
       {output.length > 0 ? (
         <Breakdown words={output} />
       ) : (
