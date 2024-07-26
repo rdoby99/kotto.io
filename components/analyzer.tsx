@@ -7,7 +7,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  textToSplit: z.string(),
+  textToSplit: z.string().min(1, {
+    message: "Text must contain at least one word.",
+  }),
 });
 
 export default function Analyzer({ onOutputReturn, onError, output }) {
@@ -18,31 +20,25 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
     },
   });
 
-  const onSubmit = (formData: z.infer<typeof formSchema>) => {
-    const analyzeText = async () => {
-      try {
-        const response = await fetch(
-          `http://127.0.0.1:5000/words?text=${encodeURIComponent(
-            formData.textToSplit
-          )}`,
-          {
-            method: "GET",
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+  const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5000/words?text=${encodeURIComponent(
+          formData.textToSplit
+        )}`,
+        {
+          method: "GET",
         }
-
-        const data = await response.json();
-        onOutputReturn(data.words);
-      } catch (error) {
-        console.error("An error occurred:", error);
-        onError(error.message);
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-
-    analyzeText();
+      const data = await response.json();
+      onOutputReturn(data.words);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      onError(error.message);
+    }
   };
 
   const handleReset = () => {
@@ -51,17 +47,22 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-full py-32">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className="h-full flex flex-col gap-2"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             name="textToSplit"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="grow flex flex-col">
                 <Textarea
                   placeholder="Input Japanese text here. ここに日本語のテキストを入力してください..."
+                  className="grow"
                   {...field}
                 />
+                <FormMessage />
               </FormItem>
             )}
           />

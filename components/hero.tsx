@@ -22,10 +22,11 @@ export default function Hero() {
         <Breakdown words={output} />
       ) : (
         <div className="text-center col-span-1 flex flex-col gap-4">
-          <h1 className="h1">Japanese Text&nbsp;Analyzer</h1>
+          <h1 className="h1">Welcome to Kotto.io</h1>
           <p className="h4">
-            Input Japanese text to get a breakdown of vocabulary words by JLPT
-            level
+            Kotto.io is a Japanese text analyzer that breaks down any Japanese
+            input into a vocabulary list. Use it as a study tool! Input Japanese
+            text to get a breakdown of vocabulary words by JLPT level
           </p>
         </div>
       )}

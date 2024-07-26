@@ -3,6 +3,11 @@ import React from "react";
 import Image from "next/image";
 
 export default function Breakdown(props) {
+  const japaneseRegex =
+    /^[\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF66-\uFF9F]+$/;
+  let wordsToShow = props.words.filter((word) => japaneseRegex.test(word));
+  let uniqueWords = new Set(wordsToShow);
+
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-center">Text Breakdown</h1>
@@ -26,7 +31,7 @@ export default function Breakdown(props) {
         </div>
         <div className="max-h-[440px] overflow-y-scroll">
           <ul className="flex flex-col divide-y divide-black">
-            {props.words.map((item, index) => (
+            {[...uniqueWords].map((item, index) => (
               <li key={index} className="flex flex-col gap-2 py-4">
                 <div className="h5 mr-4">{item}</div>
                 <div className="p-1 bg-pink-500 text-xs text-white inline-block w-fit">
