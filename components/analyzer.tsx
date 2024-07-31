@@ -23,7 +23,7 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/words?text=${encodeURIComponent(
+        `http://127.0.0.1:5001/words?text=${encodeURIComponent(
           formData.textToSplit
         )}`,
         {
