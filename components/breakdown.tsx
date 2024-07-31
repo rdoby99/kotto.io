@@ -6,11 +6,10 @@ export default function Breakdown(props) {
   //Ensure we only output Japanese words and no duplicates
   const japaneseRegex =
     /^[\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF66-\uFF9F]+$/;
-  let wordsToShow = props.words.filter((word) => japaneseRegex.test(word));
+  let wordsToShow = props.words.filter((wordObj) =>
+    japaneseRegex.test(wordObj.word)
+  );
   let uniqueWords = new Set(wordsToShow);
-
-  const description =
-    "Amet, consectetur adipiscing elit, sed do eiusmod tempor.";
 
   return (
     <div className="flex flex-col gap-8">
@@ -20,8 +19,8 @@ export default function Breakdown(props) {
           <ul className="flex flex-col divide-y divide-accent/50">
             {[...uniqueWords].map((item, index) => (
               <li key={index} className="flex flex-col gap-2 py-4">
-                <div className="h5 mr-4">{item}</div>
-                <p>{description}</p>
+                <div className="h5 mr-4">{item.word}</div>
+                <p>{item.definition}</p>
               </li>
             ))}
           </ul>

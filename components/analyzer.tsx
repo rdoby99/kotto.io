@@ -34,7 +34,8 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      onOutputReturn(data.words);
+      // console.log(data);
+      onOutputReturn(data.results);
     } catch (error) {
       console.error("An error occurred:", error);
       onError(error.message);
