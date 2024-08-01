@@ -36,12 +36,12 @@ app.get("/words", async (req, res) => {
       }
 
       // Query database
-      const placeholders = words.map((_, i) => `$${i + 1}`).join(", ");
-      const query = `SELECT * FROM words WHERE word IN (${placeholders})`;
+      // const placeholders = words.map((_, i) => `$${i + 1}`).join(", ");
+      const query = `SELECT * FROM words WHERE kanji && $1::text[]`;
 
       try {
         const client = await pool.connect();
-        const { rows } = await client.query(query, words);
+        const { rows } = await client.query(query, [words]);
         client.release();
 
         return res.json({ results: rows });
