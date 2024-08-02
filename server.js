@@ -36,8 +36,11 @@ app.get("/words", async (req, res) => {
       }
 
       // Query database
-      // const placeholders = words.map((_, i) => `$${i + 1}`).join(", ");
-      const query = `SELECT * FROM words WHERE kanji && $1::text[]`;
+      const query = `
+      SELECT * FROM words 
+      WHERE (kanji && $1::text[]) 
+        OR ((kanji IS NULL OR array_length(kanji, 1) = 0) AND reading && $1::text[]) 
+      `;
 
       try {
         const client = await pool.connect();

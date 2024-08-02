@@ -10,6 +10,7 @@ export default function Breakdown(props) {
   //   japaneseRegex.test(wordObj[0].kanji[0]);
   // );
   // let uniqueWords = new Set(wordsToShow);
+  console.log(props.words);
   let uniqueWords = new Set(props.words);
 
   return (
@@ -19,16 +20,26 @@ export default function Breakdown(props) {
         <div className="max-h-[440px] overflow-y-scroll">
           <ul className="flex flex-col divide-y divide-accent/50">
             {[...uniqueWords].map((item, index) => (
-              <li key={index} className="flex flex-col gap-2 py-4">
-                <div className="flex gap-2">
-                  {item.kanji.length && (
-                    <div className="h5 mr-4">{item.kanji[0]}</div>
-                  )}
-                  {item.reading.length && (
-                    <div className="h5 mr-4">({item.reading[0]})</div>
+              <li key={index} className="flex gap-2 py-4 items-center">
+                <div>
+                  {item.kanji ? (
+                    <div className="w-28">
+                      {item.reading && (
+                        <div className="test-sm mr-4">{item.reading[0]}</div>
+                      )}
+                      <div className="h3 mr-4">{item.kanji[0]}</div>
+                    </div>
+                  ) : (
+                    item.reading && (
+                      <div className="w-28">
+                        <div className="h3 mr-4">{item.reading[0]}</div>
+                      </div>
+                    )
                   )}
                 </div>
-                {item.definition.length && <p>{item.definition[0].gloss}</p>}
+                {item.definition.length && (
+                  <p>{item.definition[0].gloss.join("; ")}</p>
+                )}
               </li>
             ))}
           </ul>
