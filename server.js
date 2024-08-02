@@ -3,6 +3,7 @@ const cors = require("cors");
 const MeCab = require("mecab-async");
 const { Pool } = require("pg");
 const dotenv = require("dotenv");
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
 // Load environment variables from .env file
 dotenv.config();
@@ -53,6 +54,32 @@ app.get("/words", async (req, res) => {
       }
     });
   } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/csv", async (req, res) => {
+  const data = req.body.data;
+
+  const csvWriter = createCsvWriter({
+    path: "vocabulary.csv",
+    header: [
+      { id: "front", title: "FRONT" },
+      { id: "back", title: "BACK" },
+    ],
+  });
+
+  try {
+    await csvWriter.writeRecords(data);
+    console.log("csv created");
+    res.download(path.join(__dirname, "output.csv"), "output.csv", (err) => {
+      if (err) {
+        console.error(`Error downloading the file: ${err}`);
+        res.status(500).send("Error downloading the file");
+      }
+    });
+  } catch (err) {
+    console.error(`Error: ${error}`);
     return res.status(500).json({ error: err.message });
   }
 });

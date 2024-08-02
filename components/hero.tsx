@@ -22,13 +22,9 @@ export default function Hero() {
   return (
     <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
       {output.length > 0 ? (
-        // <Breakdown words={output} />
         <div>
           <h1 className="h2 mb-6">Vocabulary</h1>
           <DataTable columns={columns} data={output} />
-          <Button variant="outline" className="w-full mt-4">
-            Export as CSV
-          </Button>
         </div>
       ) : (
         <div className="text-center text-secondary-foreground col-span-1 flex flex-col gap-4">

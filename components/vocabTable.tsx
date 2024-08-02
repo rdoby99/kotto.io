@@ -40,10 +40,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Table>
+      <Table className="text-foreground">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="bg-secondary/30">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -107,6 +107,15 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
+      {table.getFilteredSelectedRowModel().rows.length ? (
+        <Button variant="outline" className="w-full mt-4">
+          Export {table.getFilteredSelectedRowModel().rows.length} rows to CSV
+        </Button>
+      ) : (
+        <Button variant="outline" className="w-full mt-4" disabled>
+          Select rows to export CSV
+        </Button>
+      )}
     </div>
   );
 }
