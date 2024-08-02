@@ -12,10 +12,10 @@ export default function Footer() {
           width={64}
           className="mb-4"
         />
-        <p>&copy; 2022 Japanese Reader</p>
+        <p>&copy; 2024 Japanese Reader</p>
         <p>Created by Ramona Doby</p>
       </div>
-      <p>Privacy Policy</p>
+      <p>Words provided by JMdict-EDICT Dictionary Project</p>
     </footer>
   );
 }

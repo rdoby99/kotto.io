@@ -23,7 +23,7 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/words?text=${encodeURIComponent(
+        `http://127.0.0.1:5001/words?text=${encodeURIComponent(
           formData.textToSplit
         )}`,
         {
@@ -34,7 +34,8 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      onOutputReturn(data.words);
+      // console.log(data);
+      onOutputReturn(data.results);
     } catch (error) {
       console.error("An error occurred:", error);
       onError(error.message);
