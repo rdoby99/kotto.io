@@ -38,6 +38,51 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleClick = async () => {
+    const selectedRows = table.getSelectedRowModel().rows;
+    // console.log(selectedRows);
+
+    const data = [];
+
+    selectedRows.forEach((row) => {
+      const front = row.getValue("Kanji")
+        ? `${row.getValue("Kanji")} (${row.getValue("Kana")})`
+        : row.getValue("Kana");
+      const back = row.getValue("Definition");
+
+      const rowObj = { front, back };
+      data.push(rowObj);
+    });
+
+    try {
+      const response = await fetch("http://127.0.0.1:5001/csv", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data }),
+      });
+
+      if (!response.ok) {
+        console.error(`HTTPS ERROR: ${response.status}`);
+        throw new Error("Network response was not ok");
+      }
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = `vocabulary${Date.now()}.csv`;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <Table className="text-foreground">
@@ -108,7 +153,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {table.getFilteredSelectedRowModel().rows.length ? (
-        <Button variant="outline" className="w-full mt-4">
+        <Button variant="outline" className="w-full mt-4" onClick={handleClick}>
           Export {table.getFilteredSelectedRowModel().rows.length} rows to CSV
         </Button>
       ) : (

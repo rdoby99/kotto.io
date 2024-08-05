@@ -40,11 +40,11 @@ export const columns: ColumnDef<VocabItem>[] = [
   {
     // accessorKey: "reading[0]",
     accessorFn: (row) => (row.reading ? row.reading[0] : ""),
-    header: "Reading",
+    header: "Kana",
   },
   {
     accessorFn: (row) =>
       row.definition ? row.definition[0].gloss.join("; ") : "",
-    header: "Defintiion",
+    header: "Definition",
   },
 ];
