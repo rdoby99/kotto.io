@@ -3,12 +3,16 @@ const cors = require("cors");
 const MeCab = require("mecab-async");
 const { Pool } = require("pg");
 const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
+const path = require("path");
+const { createObjectCsvStringifier } = require("csv-writer");
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
 const mecab = new MeCab();
 const pool = new Pool({
@@ -53,6 +57,35 @@ app.get("/words", async (req, res) => {
       }
     });
   } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Download selected rows from front end
+app.post("/csv", async (req, res) => {
+  const data = req.body.data;
+
+  const csvStringifier = createObjectCsvStringifier({
+    header: [
+      { id: "front", title: "FRONT" },
+      { id: "back", title: "BACK" },
+    ],
+  });
+
+  try {
+    const header = csvStringifier.getHeaderString();
+    const records = csvStringifier.stringifyRecords(data);
+
+    const csvContent = header + records;
+
+    // Set headers to force download
+    res.setHeader("Content-Disposition", "attachment; filename=output.csv");
+    res.setHeader("Content-Type", "text/csv");
+
+    // Send CSV content as a response
+    res.send(csvContent);
+  } catch (err) {
+    console.error(`Error: ${err}`);
     return res.status(500).json({ error: err.message });
   }
 });

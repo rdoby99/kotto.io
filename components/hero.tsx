@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import Analyzer from "./analyzer";
 import Breakdown from "./breakdown";
+import { VocabItem, columns } from "./columns";
+import { DataTable } from "./vocabTable";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const [output, setOutput] = useState([]);
@@ -19,7 +22,10 @@ export default function Hero() {
   return (
     <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
       {output.length > 0 ? (
-        <Breakdown words={output} />
+        <div>
+          <h1 className="h2 mb-6">Vocabulary</h1>
+          <DataTable columns={columns} data={output} />
+        </div>
       ) : (
         <div className="text-center text-secondary-foreground col-span-1 flex flex-col gap-4">
           <h1 className="h1">Welcome to Kotto.io</h1>

@@ -4,14 +4,14 @@ import { Button } from "@/components/ui/button";
 
 export default function Header() {
   return (
-    <header className="flex justify-between w-full py-4 px-4 md:px-16">
+    <header className="flex items-center text-foreground gap-4 w-full py-4 px-4 md:px-16">
       <Image
         src="/logo.png"
         alt="Japanese Reader Homepage"
         height={64}
         width={64}
       />
-      <Button variant="outline">Get In Touch</Button>
+      <div className="h3">Kotto.io</div>
     </header>
   );
 }
