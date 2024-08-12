@@ -12,7 +12,12 @@ const formSchema = z.object({
   }),
 });
 
-export default function Analyzer({ onOutputReturn, onError, output }) {
+export default function Analyzer({
+  onOutputReturn,
+  onError,
+  onLoading,
+  output,
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -21,6 +26,7 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
   });
 
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
+    onLoading(true);
     try {
       const response = await fetch(
         `http://127.0.0.1:5001/words?text=${encodeURIComponent(
@@ -34,11 +40,13 @@ export default function Analyzer({ onOutputReturn, onError, output }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      // console.log(data);
+
       onOutputReturn(data.results);
+      onLoading(false);
     } catch (error) {
       console.error("An error occurred:", error);
       onError(error.message);
+      onLoading(false);
     }
   };
 
