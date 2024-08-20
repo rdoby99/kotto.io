@@ -28,7 +28,7 @@ export default function Hero() {
   return (
     <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
       {/* Vocab List */}
-      {output.length > 0 && (
+      {output.length > 0 && !loading && (
         <div>
           <h1 className="h2 mb-6">Vocabulary</h1>
           <DataTable columns={columns} data={output} />
@@ -54,6 +54,7 @@ export default function Hero() {
         onError={handleError}
         onLoading={handleLoading}
         output={output}
+        loading={loading}
       />
     </section>
   );

@@ -17,6 +17,7 @@ export default function Analyzer({
   onError,
   onLoading,
   output,
+  loading,
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,9 +74,11 @@ export default function Analyzer({
               </FormItem>
             )}
           />
-          <Button type="submit">Analyze</Button>
+          <Button type="submit" disabled={loading}>
+            Analyze
+          </Button>
           {output.length > 0 ? (
-            <Button variant="link" onClick={handleReset}>
+            <Button variant="link" onClick={handleReset} disabled={loading}>
               Reset
             </Button>
           ) : null}
