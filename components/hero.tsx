@@ -6,10 +6,12 @@ import Breakdown from "./breakdown";
 import { VocabItem, columns } from "./columns";
 import { DataTable } from "./vocabTable";
 import { Button } from "@/components/ui/button";
+import VocabListSkeleton from "./vocabListSkeleton";
 
 export default function Hero() {
   const [output, setOutput] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleOutput = (value) => {
     setOutput(value);
@@ -19,14 +21,25 @@ export default function Hero() {
     setError(value);
   };
 
+  const handleLoading = (value) => {
+    setLoading(value);
+  };
+
   return (
     <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
-      {output.length > 0 ? (
+      {/* Vocab List */}
+      {output.length > 0 && (
         <div>
           <h1 className="h2 mb-6">Vocabulary</h1>
           <DataTable columns={columns} data={output} />
         </div>
-      ) : (
+      )}
+
+      {/* Skeleton */}
+      {loading && <VocabListSkeleton />}
+
+      {/* Default screen */}
+      {!loading && output.length == 0 && (
         <div className="text-center text-secondary-foreground col-span-1 flex flex-col gap-4">
           <h1 className="h1">Welcome to Kotto.io</h1>
           <p className="h4">
@@ -39,6 +52,7 @@ export default function Hero() {
       <Analyzer
         onOutputReturn={handleOutput}
         onError={handleError}
+        onLoading={handleLoading}
         output={output}
       />
     </section>
