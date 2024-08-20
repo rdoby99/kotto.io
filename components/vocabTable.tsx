@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({
     });
 
     try {
-      const response = await fetch("http://127.0.0.1:5001/csv", {
+      const response = await fetch("/api/csv", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,6 +82,11 @@ export function DataTable<TData, TValue>({
       console.error(error);
     }
   };
+
+  const rowsCount = table.getFilteredSelectedRowModel().rows.length;
+  const buttonText = rowsCount
+    ? `Export ${rowsCount} rows to CSV`
+    : "Select rows to export CSV";
 
   return (
     <div>
@@ -152,15 +157,14 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-      {table.getFilteredSelectedRowModel().rows.length ? (
-        <Button variant="outline" className="w-full mt-4" onClick={handleClick}>
-          Export {table.getFilteredSelectedRowModel().rows.length} rows to CSV
-        </Button>
-      ) : (
-        <Button variant="outline" className="w-full mt-4" disabled>
-          Select rows to export CSV
-        </Button>
-      )}
+      <Button
+        variant="outline"
+        className="w-full mt-4"
+        onClick={rowsCount ? handleClick : () => {}}
+        disabled={!rowsCount}
+      >
+        {buttonText}
+      </Button>
     </div>
   );
 }
