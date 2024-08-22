@@ -40,7 +40,7 @@ export default function Analyzer({
       }
       const data = await response.json();
 
-      onOutputReturn(data.results);
+      onOutputReturn(data.list);
       onLoading(false);
     } catch (error) {
       console.error("An error occurred:", error);
