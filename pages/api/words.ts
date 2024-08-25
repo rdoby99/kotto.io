@@ -1,17 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import MeCab from "mecab-async";
-import { Pool } from "pg";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 const mecab = new MeCab();
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: "localhost",
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-});
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -30,19 +29,21 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.json({ results: [] });
       }
 
-      // Query database
-      const query = `
-      SELECT * FROM words 
-      WHERE (kanji && $1::text[]) 
-        OR ((kanji IS NULL OR array_length(kanji, 1) = 0) AND reading && $1::text[]) 
-      `;
-
       try {
-        const client = await pool.connect();
-        const { rows } = await client.query(query, [words]);
-        client.release();
+        async function queryDatabase(words: string[]) {
+          const { data, error } = await supabase.rpc("search_words", {
+            search_terms: words,
+          });
 
-        const dataRes = rows;
+          if (error) {
+            console.error("Error querying database:", error);
+            throw new Error(`Error: ${error}`);
+          } else {
+            return data;
+          }
+        }
+
+        const dataRes = await queryDatabase(words);
 
         try {
           const openai = new OpenAI({
@@ -73,7 +74,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
               },
               {
                 role: "user",
-                content: text,
+                content: `${text}`,
               },
               {
                 role: "user",
