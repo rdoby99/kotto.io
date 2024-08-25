@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
     const selectedRows = table.getSelectedRowModel().rows;
     // console.log(selectedRows);
 
-    const data = [];
+    const data: {}[] = [];
 
     selectedRows.forEach((row) => {
       const front = row.getValue("Kanji")

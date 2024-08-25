@@ -5,6 +5,14 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  throw new Error(`Error: Missing Supabase URL`);
+}
+
+if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  throw new Error(`Error: Missing Supabase KEY`);
+}
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -12,11 +20,24 @@ const supabase = createClient(
 
 const mecab = new MeCab();
 
+async function queryDatabase(words: string[]) {
+  const { data, error } = await supabase.rpc("search_words", {
+    search_terms: words,
+  });
+
+  if (error) {
+    console.error("Error querying database:", error);
+    throw new Error(`Error: ${error}`);
+  } else {
+    return data;
+  }
+}
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Parse using Mecab
     const text = req.query.text;
-    mecab.parse(text, async (err, result) => {
+    mecab.parse(text, async (err: Error | null, result: string[]) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -30,19 +51,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       try {
-        async function queryDatabase(words: string[]) {
-          const { data, error } = await supabase.rpc("search_words", {
-            search_terms: words,
-          });
-
-          if (error) {
-            console.error("Error querying database:", error);
-            throw new Error(`Error: ${error}`);
-          } else {
-            return data;
-          }
-        }
-
         const dataRes = await queryDatabase(words);
 
         try {
@@ -99,6 +107,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err });
   }
 }

@@ -2,10 +2,8 @@
 
 import React, { useState } from "react";
 import Analyzer from "./analyzer";
-import Breakdown from "./breakdown";
-import { VocabItem, columns } from "./columns";
+import { columns } from "./columns";
 import { DataTable } from "./vocabTable";
-import { Button } from "@/components/ui/button";
 import VocabListSkeleton from "./vocabListSkeleton";
 
 export default function Hero() {
@@ -13,27 +11,29 @@ export default function Hero() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleOutput = (value) => {
+  const handleOutput = (value: []) => {
     setOutput(value);
   };
 
-  const handleError = (value) => {
+  const handleError = (value: string) => {
     setError(value);
   };
 
-  const handleLoading = (value) => {
+  const handleLoading = (value: boolean) => {
     setLoading(value);
   };
 
   return (
     <section className="grid md:grid-cols-2 gap-16 items-center w-full py-16 px-4 md:px-16 min-h-[70vh]">
       {/* Vocab List */}
-      {output.length > 0 && !loading && (
+      {output.length > 0 && !loading && !error && (
         <div>
           <h1 className="h2 mb-6">Vocabulary</h1>
           <DataTable columns={columns} data={output} />
         </div>
       )}
+
+      {error && <div>Try again.</div>}
 
       {/* Skeleton */}
       {loading && <VocabListSkeleton />}

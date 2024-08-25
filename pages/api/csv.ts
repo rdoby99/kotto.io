@@ -25,6 +25,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.send(csvContent);
   } catch (err) {
     console.error(`Error: ${err}`);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err });
   }
 }

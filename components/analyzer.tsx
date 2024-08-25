@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -12,13 +11,21 @@ const formSchema = z.object({
   }),
 });
 
+interface AnalyzerProps {
+  onOutputReturn: (value: []) => void;
+  onError: (value: string) => void;
+  onLoading: (value: boolean) => void;
+  output: {}[];
+  loading: boolean;
+}
+
 export default function Analyzer({
   onOutputReturn,
   onError,
   onLoading,
   output,
   loading,
-}) {
+}: AnalyzerProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,7 +51,7 @@ export default function Analyzer({
       onLoading(false);
     } catch (error) {
       console.error("An error occurred:", error);
-      onError(error.message);
+      onError("Error: Server Error");
       onLoading(false);
     }
   };
