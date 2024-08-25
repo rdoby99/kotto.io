@@ -284,17 +284,36 @@ parser.saxParser.ENTITIES["ok"] = "undefined";
 parser.saxParser.ENTITIES["rk"] = "undefined";
 parser.saxParser.ENTITIES["sk"] = "undefined";
 
+interface REle {
+  reb: string[];
+}
+interface KEle {
+  keb: string[];
+}
+interface sense {
+  gloss: string[];
+}
+
+interface parsedXmlTypes {
+  JMdict: {
+    entry: {
+      ent_seq: number[];
+      r_ele: REle[];
+      k_ele: KEle[];
+      sense: sense[];
+    }[];
+  };
+}
+
 // Read XML file and turn to string
-fs.readFile(xmlFilePath, "utf8", async (err, data) => {
+fs.readFile(xmlFilePath, "utf8", async (err: string, data: string) => {
   if (err) {
     console.error(`Error reading XML file: ${err}`);
     return;
   }
 
-  // data = data.replace(/&/g, "&amp;").replace(/-/g, "&#45;").replace(/;/g, "&#59;");
-
   // Parse XML file into object
-  parser.parseString(data, (err, result) => {
+  parser.parseString(data, (err: string, result: parsedXmlTypes) => {
     if (err) {
       console.error(`Error parsing XML file: ${err}`);
       return;
@@ -311,7 +330,7 @@ fs.readFile(xmlFilePath, "utf8", async (err, data) => {
  * @param parsedXml XML document in Object format
  */
 
-const updateDatabase = async (parsedXml) => {
+const updateDatabase = async (parsedXml: parsedXmlTypes) => {
   try {
     const entries = parsedXml.JMdict.entry;
 
@@ -319,26 +338,28 @@ const updateDatabase = async (parsedXml) => {
 
     for (let entry of entries) {
       const id = entry.ent_seq[0];
-      const reading = entry.r_ele ? entry.r_ele.map((r) => r.reb[0]) : [];
-      const kanji = entry.k_ele ? entry.k_ele.map((k) => k.keb[0]) : [];
+      const reading = entry.r_ele ? entry.r_ele.map((r: REle) => r.reb[0]) : [];
+      const kanji = entry.k_ele ? entry.k_ele.map((k: KEle) => k.keb[0]) : [];
       const definition = entry.sense
-        ? entry.sense.map((s) => {
+        ? entry.sense.map((s: sense) => {
             return {
               gloss: s.gloss ? s.gloss.map((g) => g[0]) : null,
             };
           })
         : null;
 
-      const definitionJSON = definition.length
-        ? JSON.stringify(definition)
-        : null;
+      if (definition) {
+        const definitionJSON = definition.length
+          ? JSON.stringify(definition)
+          : null;
 
-      await client.query(
-        `INSERT INTO words (id, kanji, reading, definition)
+        await client.query(
+          `INSERT INTO words (id, kanji, reading, definition)
           VALUES ($1, $2, $3, $4)
           ON CONFLICT (id) DO NOTHING`,
-        [id, kanji, reading, definitionJSON]
-      );
+          [id, kanji, reading, definitionJSON]
+        );
+      }
     }
 
     client.release();
