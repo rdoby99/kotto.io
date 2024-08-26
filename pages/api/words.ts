@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 // TO-DO - Type module for mecab
-// @ts-ignore
 import MeCab from "mecab-async";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
@@ -20,7 +19,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-const mecab = new MeCab();
+const mecab: any = new MeCab();
 
 async function queryDatabase(words: string[]) {
   const { data, error } = await supabase.rpc("search_words", {
