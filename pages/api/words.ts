@@ -18,7 +18,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-const mecab: any = new MeCab();
+const mecabTest: any = new MeCab();
 
 async function queryDatabase(words: string[]) {
   const { data, error } = await supabase.rpc("search_words", {
@@ -36,7 +36,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Parse using Mecab
     const text = req.query.text;
-    mecab.parse(text, async (err: Error | null, result: string[]) => {
+    mecabTest.parse(text, async (err: Error | null, result: string[]) => {
       if (err) {
         return res
           .status(500)
