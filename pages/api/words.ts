@@ -28,8 +28,7 @@ async function queryDatabase(words: string[]) {
   });
 
   if (error) {
-    console.error("Error querying database:", error);
-    throw new Error(`Error: ${error}`);
+    throw new Error(`Error querying database: ${error}`);
   } else {
     return data;
   }
@@ -41,7 +40,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const text = req.query.text;
     mecab.parse(text, async (err: Error | null, result: string[]) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
+        return res
+          .status(500)
+          .json({ error: "Error parsing text.", details: err.message });
       }
 
       const words = result
@@ -101,14 +102,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
           return res.json(response1.choices[0].message.parsed);
         } catch (err) {
-          console.error(`Error using AI API: ${err}`);
-          return res.status(500).json({ error: err });
+          return res
+            .status(500)
+            .json({ error: "Error using AI API", details: err });
         }
       } catch (err) {
-        return res.status(500).json({ error: err });
+        return res
+          .status(500)
+          .json({ error: "Error querying database", details: err });
       }
     });
   } catch (err) {
-    return res.status(500).json({ error: err });
+    return res.status(500).json({ error: "Error in handler", details: err });
   }
 }
