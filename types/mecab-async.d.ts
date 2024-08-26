@@ -53,5 +53,5 @@ declare module "mecab-async" {
     wakachiSync(str: string): string[];
   }
 
-  export = MeCab;
+  export default MeCab;
 }
