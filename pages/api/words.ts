@@ -43,7 +43,14 @@ async function queryDatabase(words: string[]) {
  * @returns array of tokens
  */
 async function tokenizeText(text: string): Promise<string[]> {
-  const gcloud = new language.LanguageServiceClient();
+  if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    throw new Error(`Error: Missing Google Cloud Credentials`);
+  }
+
+  //TO-DO update auth
+  const gcloud = new language.LanguageServiceClient({
+    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS),
+  });
 
   const document: protos.google.cloud.language.v1.IDocument = {
     content: text,
