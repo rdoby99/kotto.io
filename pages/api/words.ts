@@ -79,12 +79,12 @@ async function tokenizeText(text: string): Promise<string[]> {
 }
 
 /**
+ *  Calls OpenAI API to contextualize vocabulary
  *
- *
- * @param text
- * @param words
- * @param dataRes
- * @returns
+ * @param text - string. String of Japanese text.
+ * @param words - string[]. Tokens from text.
+ * @param dataRes - {}. Corresponding database entries from tokens.
+ * @returns json. Relevant databse entries.
  */
 async function AIAnalysis(text: string, words: string[], dataRes: {}) {
   const openai = new OpenAI({
