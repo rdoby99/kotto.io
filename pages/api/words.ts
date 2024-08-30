@@ -73,8 +73,6 @@ async function tokenizeText(text: string): Promise<string[]> {
       );
   }
 
-  console.log(tokens);
-
   return tokens || [];
 }
 

@@ -1,8 +1,12 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function VocabListSkeleton() {
+interface ListProps {
+  classes: string;
+}
+
+export default function VocabListSkeleton({ classes }: ListProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 ${classes}`}>
       <Skeleton className="w-[50%] h-[20px]" />
       <Skeleton className="w-full h-[20px]" />
       <Skeleton className="w-full h-[20px]" />

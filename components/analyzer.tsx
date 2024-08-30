@@ -17,6 +17,7 @@ interface AnalyzerProps {
   onLoading: (value: boolean) => void;
   output: {}[];
   loading: boolean;
+  classes: string;
 }
 
 export default function Analyzer({
@@ -25,6 +26,7 @@ export default function Analyzer({
   onLoading,
   output,
   loading,
+  classes,
 }: AnalyzerProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,7 +64,9 @@ export default function Analyzer({
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full py-4 md:py-32">
+    <div
+      className={`flex flex-col gap-4 h-full py-4 md:py-32 w-full ${classes}`}
+    >
       <Form {...form}>
         <form
           className="h-full flex flex-col gap-2"

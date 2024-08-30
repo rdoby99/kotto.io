@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="flex justify-between items-end w-full py-4 px-4 md:px-16 text-secondary-foreground">
-      <div className="flex flex-col">
+    <footer className="flex flex-col md:flex-row justify-between items-center md:items-end w-full py-4 px-4 md:px-16 text-secondary-foreground">
+      <div className="flex flex-col items-center">
         <Image
           src="/logo.png"
           alt="Japanese Reader Homepage"
