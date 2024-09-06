@@ -10,12 +10,12 @@ const TooltipProvider = TooltipPrimitive.Provider;
 const Tooltip = ({ delayDuration = 0, ...props }) => {
   const [open, setOpen] = React.useState(false);
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setOpen((prevOpen) => !prevOpen);
   };
 
-  const handleTouchStart = (event) => {
+  const handleTouchStart = (event: React.TouchEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setOpen((prevOpen) => !prevOpen);
   };

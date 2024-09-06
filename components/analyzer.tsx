@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Divide } from "lucide-react";
 
 const formSchema = z.object({
   textToSplit: z.string().min(1, {
@@ -38,13 +37,25 @@ export default function Analyzer({
   loading,
   classes,
 }: AnalyzerProps) {
-  const [text, setText] = useState("");
-  const [editText, setEditText] = useState(text);
-  const [isEditMode, setIsEditMode] = useState(true);
+  const Gloss = z.object({
+    gloss: z.array(z.string()),
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditText(e.target.value);
-  };
+  const Entry = z.object({
+    kanji: z.union([z.array(z.string()), z.null()]),
+    reading: z.array(z.string()),
+    definition: z.array(Gloss),
+  });
+
+  const List = z.object({
+    list: z.array(Entry),
+  });
+
+  type ListType = z.infer<typeof List>;
+  type EntryType = z.infer<typeof Entry>;
+
+  const [text, setText] = useState<ListType>();
+  const [isEditMode, setIsEditMode] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,8 +78,7 @@ export default function Analyzer({
       }
       const data = await response.json();
 
-      setText(data.list);
-      setText(data.list);
+      setText(data);
       setIsEditMode(false);
       onOutputReturn(data.list);
       onLoading(false);
@@ -85,8 +95,8 @@ export default function Analyzer({
     onOutputReturn([]);
   };
 
-  const renderTooltips = useCallback((data: {}[]) => {
-    return data.map((word, index) => (
+  const renderTooltips = useCallback((data: ListType) => {
+    return data.list.map((word: EntryType, index: number) => (
       <TooltipProvider key={index}>
         <Tooltip delayDuration={100}>
           <TooltipTrigger asChild>
@@ -163,7 +173,7 @@ export default function Analyzer({
             Tap on words to get the definition.
           </div>
           <div className="bg-white p-4 rounded-md shadow min-h-[100px] text-xl">
-            {renderTooltips(text)}
+            {text && renderTooltips(text)}
           </div>
           <Button variant="link" onClick={handleReset} disabled={loading}>
             Reset
