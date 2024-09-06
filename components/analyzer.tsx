@@ -156,7 +156,7 @@ export default function Analyzer({
       ) : (
         <div className="flex flex-col">
           <div className="text-sm italic opacity-70 pb-4">
-            Hover over words to get definition.
+            Hover over words to get the definition.
           </div>
           <div className="bg-white p-4 rounded-md shadow min-h-[100px]">
             {renderTooltips(text)}

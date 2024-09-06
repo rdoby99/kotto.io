@@ -7,9 +7,34 @@ import { cn } from "@/lib/utils";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
-const Tooltip = ({ delayDuration = 0, ...props }) => (
-  <TooltipPrimitive.Root delayDuration={delayDuration} {...props} />
-);
+const Tooltip = ({ delayDuration = 0, ...props }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleTouchStart = (event) => {
+    event.preventDefault();
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  return (
+    <TooltipPrimitive.Root
+      delayDuration={delayDuration}
+      open={open}
+      onOpenChange={setOpen}
+      {...props}
+    >
+      <TooltipPrimitive.Trigger
+        onClick={handleClick}
+        onTouchStart={handleTouchStart}
+        {...props}
+      />
+    </TooltipPrimitive.Root>
+  );
+};
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipContent = React.forwardRef<
