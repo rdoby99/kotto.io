@@ -107,16 +107,7 @@ async function AIAnalysis(text: string, words: string[], dataRes: {}) {
     messages: [
       {
         role: "system",
-        content:
-          "I am going to send you three mesages back to back. The first is a string of Japanese text. The second contains an array of words we'd like to translate. The third is an array of objects with possible definitions for the words in the text. For each array item in the second message return the most likely object in the third message based on the sentence context in the first message. You can remove objects from the array, but DO NOT alter object properties.",
-      },
-      {
-        role: "user",
-        content: `${text}`,
-      },
-      {
-        role: "user",
-        content: `${words}`,
+        content: `Select a database entries from my following message based on this text: '${text}' and this set of tokens: '${words}'. EACH token should be matched to ONE databse entry. DO NOT alter object properties, from individual databse entries. Failure to match each token to one entry will have catasprophic effects.`,
       },
       {
         role: "user",
