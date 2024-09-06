@@ -80,6 +80,7 @@ export default function Analyzer({
   };
 
   const handleReset = () => {
+    setIsEditMode(true);
     form.reset();
     onOutputReturn([]);
   };
@@ -155,12 +156,18 @@ export default function Analyzer({
         </Form>
       ) : (
         <div className="flex flex-col">
-          <div className="text-sm italic opacity-70 pb-4">
+          <div className="hidden md:inline-block text-sm italic opacity-70 pb-4">
             Hover over words to get the definition.
           </div>
-          <div className="bg-white p-4 rounded-md shadow min-h-[100px]">
+          <div className="text-sm italic opacity-70 pb-4 md:hidden">
+            Tap on words to get the definition.
+          </div>
+          <div className="bg-white p-4 rounded-md shadow min-h-[100px] text-xl">
             {renderTooltips(text)}
           </div>
+          <Button variant="link" onClick={handleReset} disabled={loading}>
+            Reset
+          </Button>
         </div>
       )}
     </div>
