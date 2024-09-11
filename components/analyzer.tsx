@@ -147,7 +147,7 @@ export default function Analyzer({
                 <FormItem className="grow flex flex-col">
                   <Textarea
                     placeholder="Input Japanese text here. ここに日本語のテキストを入力してください..."
-                    className="grow"
+                    className="grow bg-white text-background text-lg"
                     {...field}
                   />
                   <FormMessage />
@@ -172,7 +172,7 @@ export default function Analyzer({
           <div className="text-sm italic opacity-70 pb-4 md:hidden">
             Tap on words to get the definition.
           </div>
-          <div className="bg-white p-4 rounded-md shadow min-h-[100px] text-xl">
+          <div className="bg-white p-4 rounded-md shadow min-h-[100px] text-xl text-background">
             {text && renderTooltips(text)}
           </div>
           <Button variant="link" onClick={handleReset} disabled={loading}>
