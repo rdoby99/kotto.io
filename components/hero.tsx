@@ -43,14 +43,14 @@ export default function Hero() {
       {!loading && output.length == 0 && (
         <div className="text-left text-foreground col-span-1 flex flex-col gap-4 order-1">
           <h1 className="h1">Welcome to Kotto.io</h1>
-          <p className="h4">
+          <p className="mb-8 md:max-w-[70%] text-lg">
             Kotto.io is a Japanese text analyzer that breaks down any Japanese
             input into a vocabulary list. Use it as a study tool!
-          </p>
-          <p className="h4 mb-8">
+            <br />
+            <br />
             Try this sentence: これは猫です。(This is a cat.)
           </p>
-          <p>
+          <p className="text-sm">
             *Please note: This is an alpha pre-release and some features are
             still under development.
           </p>
