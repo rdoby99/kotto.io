@@ -132,7 +132,9 @@ export default function Analyzer({
             checked={isEditMode}
             onCheckedChange={setIsEditMode}
           />
-          <Label htmlFor="edit-mode">Edit Mode</Label>
+          <Label htmlFor="edit-mode">
+            {isEditMode ? "Disable Edit Mode" : "Enable Edit Mode"}
+          </Label>
         </div>
       )}
       {isEditMode ? (
