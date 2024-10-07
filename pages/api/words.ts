@@ -107,7 +107,7 @@ async function AIAnalysis(text: string, words: string[], dataRes: {}) {
     messages: [
       {
         role: "system",
-        content: `Select a database entries from my following message based on this text: '${text}' and this set of tokens: '${words}'. EACH token should be matched to ONE databse entry. DO NOT alter object properties, from individual databse entries. Failure to match each token to one entry will have catasprophic effects.`,
+        content: `Select a database entries from my following message based on this text: '${text}' and this set of tokens: '${words}'. EACH token should be matched to ONE databse entry. You must NOT edit, paraphrase, or modify the wording of an individual databse entry in any way. Simply return the exact entry that fits the context. This is an extract-only task. Do not generate or modify any text.`,
       },
       {
         role: "user",
@@ -121,11 +121,18 @@ async function AIAnalysis(text: string, words: string[], dataRes: {}) {
   return response.choices[0].message.parsed;
 }
 
+/**
+ * Main reqeust function
+ *
+ * @param req request
+ * @param res response
+ * @returns request response
+ */
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // TO-DO remove nested try catches; ensure all functions throw errors
   try {
     const text: string | undefined = Array.isArray(req.query.text)
       ? req.query.text[0]
@@ -136,32 +143,20 @@ export default async function handler(
       return;
     }
 
+    // Tokenize text
     const words = await tokenizeText(text);
+    if (!words.length) throw new Error("Error tokenizing words");
 
-    if (!words.length) {
-      return res.json({ results: [] });
-    }
+    // Query Database
+    const dataRes = await queryDatabase(words);
+    if (!dataRes) throw new Error("Error querying database");
 
-    try {
-      const dataRes = await queryDatabase(words);
+    // Use OpenAI to contextualize returned entries
+    const response = await AIAnalysis(text, words, dataRes);
+    if (!response) throw new Error("Error using AI API");
 
-      try {
-        const response = await AIAnalysis(text, words, dataRes);
-
-        return res.json(response);
-      } catch (err) {
-        return res
-          .status(500)
-          .json({ error: "Error using AI API", details: err });
-      }
-    } catch (err) {
-      return res
-        .status(500)
-        .json({ error: "Error querying database", details: err });
-    }
+    return res.json(response);
   } catch (err) {
-    return res
-      .status(500)
-      .json({ error: "Error tokenizing text.", details: err });
+    return res.status(500).json({ error: "Error", details: err });
   }
 }

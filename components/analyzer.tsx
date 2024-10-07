@@ -26,7 +26,7 @@ interface AnalyzerProps {
   onLoading: (value: boolean) => void;
   output: {}[];
   loading: boolean;
-  classes: string;
+  classes: string | null;
 }
 
 export default function Analyzer({
