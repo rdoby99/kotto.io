@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Table className="text-foreground">
+      <Table className="text-background bg-foreground rounded-lg">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="bg-secondary/30">
@@ -158,7 +158,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       <Button
-        variant="outline"
+        variant="default"
         className="w-full mt-4"
         onClick={rowsCount ? handleClick : () => {}}
         disabled={!rowsCount}

@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 200 95% 14%;
+    --background: 200 95% 14%;
+    --foreground: 0 0% 100%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -29,10 +29,6 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
-    /* Fonts */
-    --font-header: "Poppins", sans-serif;
-    --font-body: "Noto Sans JP", sans-serif;
   }
 
   .dark {
@@ -74,34 +70,45 @@
 
 h1,
 .h1 {
-  @apply font-header text-4xl md:text-6xl;
+  @apply text-4xl md:text-6xl;
+  font-family: var(--font-lato);
 }
 
 h2,
 .h2 {
-  @apply font-header text-3xl md:text-4xl;
+  @apply text-3xl md:text-4xl;
+  font-family: var(--font-lato);
 }
 
 h3,
 .h3 {
-  @apply font-header text-xl md:text-2xl;
+  @apply text-xl md:text-2xl;
+  font-family: var(--font-lato);
 }
 
 h4,
 .h4 {
-  @apply font-header text-lg md:text-xl;
+  @apply text-lg md:text-xl;
+  font-family: var(--font-lato);
 }
 
 h5,
 .h5 {
-  @apply font-header text-lg;
+  @apply text-lg;
+  font-family: var(--font-lato);
 }
 
 h6,
 .h6 {
-  @apply font-header text-base;
+  @apply text-base;
+  font-family: var(--font-lato);
 }
 
 p {
   @apply text-sm md:text-base;
+  font-family: var(--font-noto-sans-jp);
+}
+
+.feature__card {
+  @apply bg-foreground text-background rounded-lg p-8 pb-16;
 }
