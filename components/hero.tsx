@@ -34,8 +34,6 @@ export default function Hero() {
         </div>
       )}
 
-      {error && <div>Try again.</div>}
-
       {/* Skeleton */}
       {loading && <VocabListSkeleton classes="order-3 md:order-1 opacity-70" />}
 
@@ -56,14 +54,20 @@ export default function Hero() {
           </p>
         </div>
       )}
-      <Analyzer
-        onOutputReturn={handleOutput}
-        onError={handleError}
-        onLoading={handleLoading}
-        output={output}
-        loading={loading}
-        classes={output.length > 0 ? "order-1 md:order-2" : "order-2"}
-      />
+      <div
+        className={`${
+          output.length > 0 ? "order-1 md:order-2" : "order-2"
+        } h-full`}
+      >
+        <Analyzer
+          onOutputReturn={handleOutput}
+          onError={handleError}
+          onLoading={handleLoading}
+          output={output}
+          loading={loading}
+        />
+        {error && <div>Try again.</div>}
+      </div>
     </section>
   );
 }
